@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH --output=slurm_logs/plot_all%j.out
+
+#SBATCH --error=slurm_logs/plot_all%j.err
+
+#SBATCH --job-name=plot_all
+
+#SBATCH --partition=ioannidis
+
+#SBATCH -w c3096
+
+#SBATCH --time=1-00:00:00
+
+#SBATCH --mem=10Gb
+
+srun python GeneratePlots.py --type $1

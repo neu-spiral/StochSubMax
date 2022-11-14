@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#SBATCH --output=slurm_logs/IM_uniform100_poly_%j.out
+
+#SBATCH --error=slurm_logs/IM_uniform100_poly_%j.err
+
+#SBATCH --job-name='IM_uniform100_poly'
+
+#SBATCH --partition=ioannidis
+
+#SBATCH --mem=10Gb
+
+srun python TestModule.py --problemType IM --input datasets/RB100uniform_100_100_400 --partitions datasets/RB100uniform_100_100_400_partitions --estimator polynomial --stochasticORdeterministic stochastic --constraints 2 --degree $1 --iterations $2

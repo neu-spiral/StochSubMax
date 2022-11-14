@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for type in PARETOLOG ITERATIONSvsUTILITY TIMEvsUTILITY LOGTIMEvsUTILITY
+do
+    sbatch shell/plot $type
+done
