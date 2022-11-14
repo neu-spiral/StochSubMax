@@ -195,6 +195,9 @@ class GradientEstimator(object):
         """
         pass
 
+    def fun_estimate(self, y):
+        pass
+
     def estimate(self, y):
         """
         Estimate function to be called in the ContinuousGreedy.
@@ -214,6 +217,14 @@ class StochasticGradientEstimator(GradientEstimator):
         super(StochasticGradientEstimator, self).__init__()
         self.estimator_dict = estimator_dict
         self.seed = seed
+
+    def fun_estimate(self, y):
+        """
+        Estimate function to be called in the ContinuousGreedy.
+        param y: a dictionary denoting the fractional vector
+        """
+        k = random.choice(list(self.estimator_dict))
+        return self.estimator_dict[k].fun_estimate(y)
 
     def estimate(self, y):
         """
@@ -284,6 +295,15 @@ class SamplerEstimator(GradientEstimator):
         self.num_of_samples = num_of_samples
         self.dependencies = dependencies
 
+    def fun_estimate(self, y):
+        output = dict.fromkeys(y.keys(), 0.0)
+        for j in range(self.num_of_samples):
+            logging.info('Generating ' + str(j + 1) + '. sample... \n')
+            x = generate_samples(y).copy()
+            output += self.objective_func(x)
+        output = {key: output[key] / self.num_of_samples for key in output.keys()}
+        return output
+
     def estimate(self, y):
         """
         Estimates the function in self using sampling. y is a dictionary of
@@ -329,6 +349,9 @@ class PolynomialEstimator(GradientEstimator):
         super(PolynomialEstimator, self).__init__()
         self.my_wdnf = my_wdnf
         logging.info('...done.')
+
+    def fun_estimate(self, y):
+        return self.my_wdnf(y)
 
     def estimate(self, y):
         """
